@@ -4,18 +4,17 @@ import "./Home.css";
 
 const Home = () => {
   return (
-    <div className="home-container">
-      <nav className="navbar">
-        <h2>TrackForce</h2>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/topics">Topics</Link></li>
-        </ul>
-      </nav>
-      <h1>Welcome to TrackForce</h1>
-      <p>Organize and track Codeforces problems topic-wise to improve your coding skills.</p>
-      <button className="start-btn"><Link to="/topics">View Topics</Link></button>
-    </div>
+    <main className="home-container">
+      <div className="content-wrapper">
+        <h1 className="welcome-title">Welcome to TrackForce</h1>
+        <p className="welcome-description">Organize and track Codeforces problems topic-wise to improve your coding skills.</p>
+        <div className="cta-container">
+          <button className="start-btn">
+            <Link className="link-style" to="/topics">View Topics</Link>
+          </button>
+        </div>
+      </div>
+    </main>
   );
 };
 

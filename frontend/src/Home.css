@@ -1,31 +1,77 @@
 .home-container {
-    text-align: center;
-    margin-top: 50px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
+}
+
+.content-wrapper {
+  max-width: 800px;
+  text-align: center;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.welcome-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: #2d3436;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-description {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: #636e72;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-container {
+  margin-top: 2rem;
+}
+
+.start-btn {
+  padding: 0.8em 2em;
+  font-size: 1.1rem;
+  background-color: #f5b14b;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.link-style {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.start-btn:hover {
+  background-color: #9ef23f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  h1 {
-    font-size: 2rem;
-    color: #333;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  p {
-    font-size: 1.2rem;
-    color: #666;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 0 20px;
   }
-  
-  .start-btn {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #f5b14b;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .start-btn:hover {
-    background-color: #9ef23f;
-  }
-  
+}
