@@ -1,10 +1,18 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+const connectDB = require('./utils/db');
+const authRoutes = require('./routes/authRoutes');
+const problemRoutes = require('./routes/problemRoutes');
+require('dotenv').config();
 
-app.get('/' , (req,res)=>{
-    res.send('hello TrackForce')
-})
+// Connect DB
+connectDB();
 
-app.listen(3000 , ()=>{
-    console.log(`Server started at : http://localhost:3000`)
-})
+// Middleware
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/problems', problemRoutes);
+
+module.exports = app;
