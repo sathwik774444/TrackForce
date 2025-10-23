@@ -1,0 +1,141 @@
+:root {
+    --max-width: 1000px;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f7f8fb;
+    color: #222;
+}
+
+.app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: var(--max-width);
+    margin: 24px auto;
+    padding: 0 16px;
+    flex: 1;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.brand {
+    font-weight: 700;
+    text-decoration: none;
+    color: #111;
+}
+
+.nav-right a,
+.nav-right .btn-link {
+    margin-left: 12px;
+    text-decoration: none;
+    color: #333;
+}
+
+.footer {
+    text-align: center;
+    padding: 12px;
+    font-size: 13px;
+    color: #666;
+}
+
+.auth-card,
+.profile-card {
+    background: #fff;
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+    max-width: 480px;
+    margin: 24px auto;
+}
+
+.auth-card label,
+.profile-card label {
+    display: block;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.auth-card input,
+.profile-card input,
+.profile-card textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.btn {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #2b6cb0;
+    color: white;
+}
+
+.btn-small {
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.category-card {
+    background: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
+}
+
+.problem-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+}
+
+.problem-card.solved {
+    opacity: 0.6;
+}
+
+.leaderboard {
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.leaderboard-row {
+    display: flex;
+    gap: 16px;
+    padding: 8px 4px;
+    align-items: center;
+}
+
+.leaderboard-row .rank {
+    width: 36px;
+    font-weight: 700;
+}

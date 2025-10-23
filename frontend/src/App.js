@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./components/Home";
-import Topics from "./components/Topics";
-import Arrays from "./components/Arrays";
-import Strings from "./components/Strings";
-import LinkedList from "./components/LinkedList";
+import Home from "./Home";
+import Topics from "./Topics";
+import Arrays from "./Arrays";
+import Strings from "./Strings";
+import LinkedList from "./LinkedList";
 
 function App() {
   return (
