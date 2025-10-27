@@ -1,31 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import problemService from '../services/problemService';
-import CategoryCard from '../components/CategoryCard';
+import React, { useEffect, useState } from 'react';
+import API from '../api';
 
 export default function Dashboard() {
-  const [topics, setTopics] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    problemService
-      .getTopics()
-      .then((res) => setTopics(res.data))
-      .catch(() => setTopics([]))
-      .finally(() => setLoading(false));
+    API.get('/auth/me')
+      .then(res => setUser(res.data))
+      .catch(() => setUser(null));
   }, []);
+
+  if (!user) return <p>Loading...</p>;
 
   return (
     <div>
-      <h1>Topics</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="grid">
-          {topics.map((t) => (
-            <CategoryCard key={t._id} topic={t} />
-          ))}
-        </div>
-      )}
+      <h2>Dashboard</h2>
+      <p>Welcome, {user.name}!</p>
+      <p>Solved Problems: {user.solved.length}</p>
+      <ul>
+        {user.solved.map(p => (
+          <li key={p._id}>
+            <a href={p.url} target="_blank" rel="noreferrer">{p.title}</a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

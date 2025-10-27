@@ -1,41 +1,50 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
 
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import API, { setToken } from '../api';
 
-export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const { login } = useContext(AuthContext);
-    const navigate = useNavigate();
-    const location = useLocation();
+export default function Login({ setUser }) {   // receive setUser from App.jsx
+  const [form, setForm] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
+  const submit = async e => {
+    e.preventDefault();
+    try {
+      const res = await API.post('/auth/login', form);
 
-    const from = location.state?.from?.pathname || '/';
+      if (res.data.token) {
+        // store token
+        localStorage.setItem('tf_token', res.data.token);
+        setToken(res.data.token);
 
+        // fetch user info
+        const userRes = await API.get('/auth/me');
+        setUser(userRes.data);   // update App.jsx user state
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await login(email, password);
-            navigate(from, { replace: true });
-        } catch (err) {
-            alert(err.response?.data?.message || 'Login failed');
-        }
-    };
+        alert('Logged in');
+        navigate('/dashboard');  // redirect to dashboard
+      }
+    } catch (err) {
+      alert('Login failed');
+      console.error(err);
+    }
+  };
 
-
-    return (
-        <div className="auth-card">
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <label>Email</label>
-                <input value={email} onChange={e => setEmail(e.target.value)} required />
-                <label>Password</label>
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-                <button className="btn">Login</button>
-            </form>
-            <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
-        </div>
-    );
+  return (
+    <form className="auth" onSubmit={submit}>
+      <h3>Login</h3>
+      <input
+        placeholder="Email"
+        value={form.email}
+        onChange={e => setForm({ ...form, email: e.target.value })}
+      />
+      <input
+        placeholder="Password"
+        type="password"
+        value={form.password}
+        onChange={e => setForm({ ...form, password: e.target.value })}
+      />
+      <button>Login</button>
+    </form>
+  );
 }

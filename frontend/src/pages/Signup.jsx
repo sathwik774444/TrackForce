@@ -1,40 +1,58 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
 
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import API, { setToken } from '../api';
 
-export default function Signup() {
-    const [username, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const { signup } = useContext(AuthContext);
-    const navigate = useNavigate();
+export default function Signup({ setUser }) {   // receive setUser from App.jsx
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const navigate = useNavigate();
 
+  const submit = async e => {
+    e.preventDefault();
+    try {
+      const res = await API.post('/auth/signup', form);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await signup({ username, email, password });
-            navigate('/');
-        } catch (err) {
-            alert(err.response?.data?.message || 'Signup failed');
-        }
-    };
+      if (res.data.token) {
+        // store token
+        localStorage.setItem('tf_token', res.data.token);
+        setToken(res.data.token);
 
+        // fetch user info
+        const userRes = await API.get('/auth/me');
+        setUser(userRes.data);   // update App.jsx user state
 
-    return (
-        <div className="auth-card">
-            <h2>Sign up</h2>
-            <form onSubmit={handleSubmit}>
-                <label>Name</label>
-                <input value={username} onChange={e => setName(e.target.value)} required />
-                <label>Email</label>
-                <input value={email} onChange={e => setEmail(e.target.value)} required />
-                <label>Password</label>
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-                <button className="btn">Create account</button>
-            </form>
-            <p>Already have an account? <Link to="/login">Login</Link></p>
-        </div>
-    );
+        alert('Signed up and logged in');
+        navigate('/dashboard');  // redirect to dashboard
+      }
+    } catch (err) {
+      alert('Signup failed');
+      console.error(err);
+    }
+  };
+
+  return (
+    <form className="auth" onSubmit={submit}>
+      <h3>Signup</h3>
+      <input
+        placeholder="Name"
+        value={form.name}
+        onChange={e => setForm({ ...form, name: e.target.value })}
+        required
+      />
+      <input
+        placeholder="Email"
+        value={form.email}
+        onChange={e => setForm({ ...form, email: e.target.value })}
+        required
+      />
+      <input
+        placeholder="Password"
+        type="password"
+        value={form.password}
+        onChange={e => setForm({ ...form, password: e.target.value })}
+        required
+      />
+      <button>Signup</button>
+    </form>
+  );
 }

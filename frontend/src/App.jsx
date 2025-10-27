@@ -1,61 +1,59 @@
-// import React from "react";
-// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import Home from "./components/Home";
-// import Topics from "./components/Topics";
-// import Arrays from "./components/Arrays";
-// import Strings from "./components/Strings";
-// import LinkedList from "./components/LinkedList";
-
-// function App() {
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/" element={<Home />} />
-//         <Route path="/topics" element={<Topics />} />
-//         <Route path="/problems/arrays" element={<Arrays />} />
-//         <Route path="/problems/strings" element={<Strings />} />
-//         <Route path='/problems/linkedlist' element={<LinkedList />} /> 
-//       </Routes>
-//     </Router>
-//   );
-// }
-
-// export default App;
-
 
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Login from './pages/Login';
+import { useEffect, useState } from 'react';
+import API from './api';
+import { Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import Problems from './pages/Problems';
 import Signup from './pages/Signup';
+import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import TopicProblems from './pages/TopicProblems';
-import Leaderboard from './pages/Leaderboard';
-import Profile from './pages/Profile';
-import PrivateRoute from './routes/PrivateRoute';
+import AddProblem from './pages/AddProblem';
+import ProtectedRoute from './components/ProtectedRoute';
+import Ranking from './pages/Ranking';
 
 
 export default function App() {
-    return (
-        <div className="app-root">
-            <Navbar />
-            <main className="container">
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
+  const [user, setUser] = useState(null);
 
-
-                    <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-                    <Route path="/topic/:topicId" element={<PrivateRoute><TopicProblems /></PrivateRoute>} />
-                    <Route path="/leaderboard" element={<PrivateRoute><Leaderboard /></PrivateRoute>} />
-                    <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-
-
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-            </main>
-            <Footer />
-        </div>
-    );
+  useEffect(() => {
+    const token = localStorage.getItem('tf_token');
+    if (token) {
+      API.get('/auth/me')
+        .then(res => setUser(res.data))
+        .catch(() => setUser(null));
+    }
+  }, []);
+  return (
+    <div className="app">
+      <nav className="nav">
+        <Link to="/">Home</Link>
+        <Link to="/dashboard">Dashboard</Link>
+        {user?.isAdmin && <Link to="/add-problem">Add Problem</Link>}
+        {!user && <Link to="/signup">Signup</Link>}
+        {!user && <Link to="/login">Login</Link>}
+        <Link to="/ranking">Ranking</Link>
+      </nav>
+      <main className="container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/topic/:id" element={<Problems />} />
+          <Route path="/signup" element={<Signup setUser={setUser} />} />
+          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/ranking" element={<Ranking />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/add-problem" element={
+            <ProtectedRoute>
+              <AddProblem />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </main>
+    </div>
+  );
 }
+
